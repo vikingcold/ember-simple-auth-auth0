@@ -16,10 +16,13 @@ export default Auth0BaseAuthenticator.extend({
   auth0: service(),
   session: service(),
   authenticate(urlHashData) {
+    const issuedAt = Math.ceil(Date.now() / 1000);
+
     return new RSVP.Promise((resolve, reject) => {
       if (isEmpty(urlHashData)) {
         reject();
       }
+      
       const auth0 = get(this, 'auth0').getAuth0Instance();
       const getUserInfo = auth0.client.userInfo.bind(auth0.client);
 
@@ -28,7 +31,7 @@ export default Auth0BaseAuthenticator.extend({
           return reject(new Auth0Error(err));
         }
 
-        resolve(createSessionDataObject(profile, urlHashData));
+        resolve(createSessionDataObject(urlHashData, profile, issuedAt));
       });
     });
   },

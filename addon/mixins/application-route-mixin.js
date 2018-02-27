@@ -119,21 +119,22 @@ export default Mixin.create(ApplicationRouteMixin, {
    */
   _expiresAt: computed('session.data.authenticated', {
     get() {
-      let exp = 0;
-
       if (!get(this, 'session.isAuthenticated')) {
-        return exp;
+        return 0;
       }
 
-      const foo = getWithDefault(this, 'session.data.authenticated.idTokenPayload.exp', exp);
+      const expiresIn = getWithDefault(this, 'session.data.authenticated.expiresIn', 0);
+      const issuedAt = getWithDefault(this, 'session.data.authenticated.issuedAt', 0);
 
-      return getWithDefault(this, 'session.data.authenticated.expiresIn', foo);
+      return expiresIn + issuedAt;
     }
   }),
 
   _jwtRemainingTimeInSeconds: computed('_expiresAt', {
     get() {
-      return getWithDefault(this, '_expiresAt', 0);
+      const remaining = getWithDefault(this, '_expiresAt', 0) - Math.ceil(Date.now() / 1000);
+
+      return remaining < 0 ? 0 : remaining;
     }
   }),
 

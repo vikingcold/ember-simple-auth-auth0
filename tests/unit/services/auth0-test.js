@@ -111,7 +111,7 @@ test('showLock calls getUserInfo', function(assert) {
     idToken: '1.2.3',
   };
 
-  const expectedData = createSessionDataObject(profile, authenticatedData);
+  const expectedData = createSessionDataObject(authenticatedData, profile);
 
   set(stubbedLock, 'profile', profile);
   const subject = this.subject({

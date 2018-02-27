@@ -89,13 +89,15 @@ export default Service.extend({
       if (isEmpty(authenticatedData)) {
         return reject(new Auth0Error('The authenticated data did not come back from the request'));
       }
+      
+      const issuedAt = Math.ceil(Date.now() / 1000);
 
       lock.getUserInfo(authenticatedData.accessToken, (error, profile) => {
         if (error) {
           return reject(new Auth0Error(error));
         }
 
-        resolve(createSessionDataObject(profile, authenticatedData));
+        resolve(createSessionDataObject(authenticatedData, profile, issuedAt));
       });
     });
   },

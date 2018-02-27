@@ -21,7 +21,7 @@ test('it merges the profile and token info', function(assert) {
   };
 
   let expectedResult = assign({ profile }, tokenInfo);
-  let result = createSessionDataObject(profile, tokenInfo);
+  let result = createSessionDataObject(tokenInfo, profile);
   assert.deepEqual(result, expectedResult);
 });
 
@@ -42,6 +42,6 @@ test('it merges the profile and token info, ignoring a previous profile attribut
     profile,
   };
 
-  let result = createSessionDataObject(profile, tokenInfo);
+  let result = createSessionDataObject(tokenInfo, profile);
   assert.deepEqual(result, expectedResult);
 });
